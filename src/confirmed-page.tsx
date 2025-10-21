@@ -9,7 +9,7 @@ export default function ConfirmedPage() {
   const [searchParams,] = useSearchParams();
 
   // Query params opcionais
-  const redirectUrl = searchParams.get("to") || import.meta.env.VITE_PUBLIC_ZOHO_SURVEY;
+  const redirectUrl = searchParams.get("to") || process.env.VITE_PUBLIC_ZOHO_SURVEY || "/";
   const delay = Number(searchParams.get("delay")) || 15;
 
   const [countdown, setCountdown] = useState(delay);
