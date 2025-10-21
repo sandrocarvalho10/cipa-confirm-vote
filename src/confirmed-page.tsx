@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import confirmaUrna from './assets/confirma-urna.mp3'
 
 export default function ConfirmedPage() {
-  const router = useNavigate();
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const [searchParams,] = useSearchParams();
 
   // Query params opcionais
-  const redirectUrl = searchParams.get("to") || import.meta.env.VITE_PUBLIC_ZOHO_SURVEY || "/";
+  const redirectUrl = searchParams.get("to") || process.env.REACT_PUBLIC_ZOHO_SURVEY || "/";
   const delay = Number(searchParams.get("delay")) || 15;
 
   const [countdown, setCountdown] = useState(delay);
