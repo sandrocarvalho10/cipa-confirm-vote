@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import confirmaUrna from './assets/confirma-urna.mp3'
 
@@ -9,26 +9,25 @@ export default function ConfirmedPage() {
   const [searchParams,] = useSearchParams();
 
   // Query params opcionais
-  const redirectUrl = searchParams.get("to") || process.env.REACT_PUBLIC_ZOHO_SURVEY || "/";
+  const redirectUrl = searchParams.get("to") || import.meta.env.VITE_PUBLIC_ZOHO_SURVEY || "/";
   const delay = Number(searchParams.get("delay")) || 15;
 
   const [countdown, setCountdown] = useState(delay);
   const [started, setStarted] = useState(false);
 
   const onConfirmVote = useCallback(() => {
-    // if (!started) return;
-    setStarted(true)
+    setStarted(true);
     // toca o som da urna
     audioRef.current?.load();
     audioRef.current?.play().catch(() => console.warn("Autoplay bloqueado."));
+  }, []);
 
+  useEffect(() => {
+    if (!started) return;
 
-
-    // inicia o contador
     const interval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          clearInterval(interval);
           window.location.href = redirectUrl;
           return 0;
         }
@@ -37,7 +36,7 @@ export default function ConfirmedPage() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [router, redirectUrl]);
+  }, [started, redirectUrl]);
 
 
 
